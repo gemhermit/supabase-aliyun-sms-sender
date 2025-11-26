@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  aliyun-sms-sender:
+    build: .
+    container_name: aliyun-sms-sender
+    ports:
+      - "8000:8000"
+    environment:
+      # 阿里云短信配置
+      - ALIYUN_ACCESS_KEY_ID=${ALIYUN_ACCESS_KEY_ID}
+      - ALIYUN_ACCESS_KEY_SECRET=${ALIYUN_ACCESS_KEY_SECRET}
+      - ALIYUN_SMS_SIGN_NAME=${ALIYUN_SMS_SIGN_NAME}
+      - ALIYUN_SMS_TEMPLATE_CODE=${ALIYUN_SMS_TEMPLATE_CODE}
+      # Webhook 签名密钥
+      - SEND_SMS_HOOK_SECRET=${SEND_SMS_HOOK_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 可选：添加 Nginx 作为反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: aliyun-sms-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # SSL 证书目录（可选）
+    depends_on:
+      - aliyun-sms-sender
+    restart: unless-stopped
+    profiles: ["with-nginx"]  # 使用 --profile with-nginx 启用

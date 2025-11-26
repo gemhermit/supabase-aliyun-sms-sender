@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+DEPLOYMENT.md
+test-client.js
+package.json
+Dockerfile
+docker-compose.yml
+.env*
+node_modules/
+*.log

@@ -1,0 +1,33 @@
+{
+  "name": "supabase-aliyun-sms-sender",
+  "version": "1.0.0",
+  "description": "独立部署的阿里云短信发送服务，支持 Supabase Auth Hook 和直接 API 调用",
+  "main": "index.ts",
+  "scripts": {
+    "start": "deno run --allow-net --allow-env index.ts",
+    "dev": "deno run --allow-net --allow-env --watch index.ts",
+    "test": "node test-client.js",
+    "docker:build": "docker build -t aliyun-sms-sender .",
+    "docker:run": "docker run -d --name aliyun-sms-sender -p 8000:8000 aliyun-sms-sender",
+    "docker:logs": "docker logs -f aliyun-sms-sender"
+  },
+  "keywords": [
+    "supabase",
+    "aliyun",
+    "sms",
+    "verification",
+    "deno",
+    "edge-functions"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "standardwebhooks": "^1.0.0"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "deno": ">=2.1.0"
+  }
+}
